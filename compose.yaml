@@ -3,6 +3,8 @@ services:
     image: 'mongo:3'
     volumes:
       - mongo-data:/data/db
+    networks:
+      - central-network
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch:5.6.11'
     ports:
@@ -14,6 +16,16 @@ services:
       - .env
     volumes:
       - es-data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    networks:
+      - central-network
   graylog:
     image: 'graylog/graylog:2.4.6-1'
     env_file:
@@ -23,6 +35,12 @@ services:
       - '12201:12201'
       - '514:514'
       - '5555:5555'
+    networks:
+      - central-network
 volumes:
   mongo-data:
   es-data:
+networks:
+  central-network:
+    name: central-network
+    driver: bridge
