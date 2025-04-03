@@ -16,14 +16,6 @@ services:
       - .env
     volumes:
       - es-data:/usr/share/elasticsearch/data
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    deploy:
-      resources:
-        limits:
-          memory: 1g
     networks:
       - central-network
   graylog:
